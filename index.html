@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&family=Great+Vibes&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* --- SCENE 1: ABSORBING HEART --- */
+        #scene1 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            perspective: 1000px;
+            background: radial-gradient(circle, #ffcbd5 0%, #ffafbd 100%);
+        }
+
+        .main-heart {
+            position: relative;
+            width: 100px;
+            height: 90px;
+            background-color: #ff4d4d;
+            transform: rotate(-45deg);
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
+            animation: pulse 1s infinite alternate;
+            z-index: 10;
+        }
+
+        .main-heart::before, .main-heart::after {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: #ff4d4d;
+            border-radius: 50%;
+        }
+
+        .main-heart::before { top: -50px; left: 0; }
+        .main-heart::after { left: 50px; top: 0; }
+
+        @keyframes pulse { to { transform: rotate(-45deg) scale(1.2); } }
+
+        .floating-heart {
+            position: absolute;
+            color: #ff4d4d;
+            font-size: 20px;
+            animation: absorb 3s forwards ease-in;
+        }
+
+        @keyframes absorb {
+            0% { transform: translate(var(--x), var(--y)) scale(1); opacity: 1; }
+            100% { transform: translate(0, 0) scale(0); opacity: 0; }
+        }
+
+        /* --- SCENE 2: GARDEN & PROPOSAL --- */
+        #scene2 {
+            display: none;
+            height: 100vh;
+            background: linear-gradient(to bottom, #87CEEB 0%, #e1fffe 70%, #2d5a27 100%);
+            position: relative;
+        }
+
+        .sunflower {
+            position: absolute;
+            bottom: 0;
+            font-size: 50px;
+            animation: sway 3s infinite ease-in-out;
+            transform-origin: bottom center;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        #envelope-container {
+            display: none;
+            position: absolute;
+            top: 40%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 100;
+        }
+
+        .envelope { font-size: 100px; cursor: pointer; animation: flyIn 2s ease-out; }
+
+        @keyframes flyIn {
+            0% { transform: translate(-1000px, 200px) rotate(30deg); }
+            100% { transform: translate(0, 0) rotate(0); }
+        }
+
+        .letter {
+            display: none;
+            background: #fff9e6;
+            padding: 30px;
+            border: 4px double #ff4d4d;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: unfold 1s forwards;
+        }
+
+        @keyframes unfold { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+        .btn-group { margin-top: 20px; position: relative; height: 50px; }
+        .btn { padding: 10px 25px; border-radius: 20px; border: none; cursor: pointer; }
+        #yesBtn { background: #ff4d4d; color: white; }
+        #noBtn { background: #888; color: white; position: absolute; transition: 0.2s; }
+
+        /* --- SCENE 3: THE 3 CARDS --- */
+        #scene3 {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #fff0f3;
+        }
+
+        .card-container { display: flex; gap: 20px; perspective: 1200px; flex-wrap: wrap; justify-content: center; }
+        .card { width: 200px; height: 300px; cursor: pointer; position: relative; transform-style: preserve-3d; transition: 0.8s; }
+        .card.flipped { transform: rotateY(180deg); }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 20px; text-align: center; box-sizing: border-box; }
+        .card-back { background: linear-gradient(45deg, #ff4d6d, #ff758f); color: white; border: 4px solid #fff; font-size: 2rem; }
+        .card-front { background: white; color: #590d22; transform: rotateY(180deg); border: 2px solid #ff4d6d; font-size: 1rem; }
+
+        #reveal-final-btn {
+            margin-top: 40px; padding: 15px 30px; background: #ff4d6d; color: white; border: none; border-radius: 50px; display: none; cursor: pointer;
+        }
+
+        /* --- SCENE 4: FINAL MESSAGE --- */
+        #scene4 {
+            display: none;
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover; background-position: center;
+            flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;
+        }
+
+        .typing-container { font-family: 'Great Vibes', cursive; font-size: 2.2rem; max-width: 700px; margin-bottom: 30px; text-shadow: 2px 2px 8px rgba(0,0,0,0.7); }
+        .bottom-note { font-size: 1.2rem; font-weight: 600; color: #ffb3c1; opacity: 0; transition: 2s; background: rgba(0,0,0,0.3); padding: 10px 20px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="scene1">
+        <div class="main-heart"></div>
+    </div>
+
+    <div id="scene2">
+        <div id="garden"></div>
+        <div id="envelope-container">
+            <div id="envelope" class="envelope" onclick="openLetter()">✉️</div>
+            <div id="letter" class="letter">
+                <h2>Would you like to be my Valentine Miss Tanishqua?? ❤️</h2>
+                <div class="btn-group">
+                    <button id="yesBtn" class="btn" onclick="goToCards()">Yes</button>
+                    <button id="noBtn" class="btn">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="scene3">
+        <h1 style="color: #ff4d6d;">A few things for you...</h1>
+        <div class="card-container">
+            <div class="card" onclick="flipCard(this)">
+                <div class="card-face card-back">01</div>
+                <div class="card-face card-front">"You are amazing, you don't need anyone's compliment."</div>
+            </div>
+            <div class="card" onclick="flipCard(this)">
+                <div class="card-face card-back">02</div>
+                <div class="card-face card-front">"No one is perfect or always right, but you are baby ❤️"</div>
+            </div>
+            <div class="card" onclick="flipCard(this)">
+                <div class="card-face card-back">03</div>
+                <div class="card-face card-front">"You think you are hot and sexy? then yess you are with a chubby figure 😉"</div>
+            </div>
+        </div>
+        <button id="reveal-final-btn" onclick="goToFinal()">Click to reveal the final message</button>
+    </div>
+
+    <div id="scene4">
+        <div class="typing-container" id="typing-text"></div>
+        <div class="bottom-note" id="bottom-note">Just let me know if you really want to plan something 😉</div>
+    </div>
+
+    <script>
+        // 1. Scene 1 Animation Logic
+        for (let i = 0; i < 40; i++) {
+            let h = document.createElement('div');
+            h.innerHTML = '❤️'; h.className = 'floating-heart';
+            h.style.setProperty('--x', (Math.random() * 2000 - 1000) + 'px');
+            h.style.setProperty('--y', (Math.random() * 2000 - 1000) + 'px');
+            document.getElementById('scene1').appendChild(h);
+        }
+
+        setTimeout(() => {
+            document.getElementById('scene1').style.display = 'none';
+            document.getElementById('scene2').style.display = 'block';
+            createGarden();
+            setTimeout(() => { document.getElementById('envelope-container').style.display = 'block'; }, 2000);
+        }, 3000);
+
+        function createGarden() {
+            const garden = document.getElementById('garden');
+            for (let i = 0; i < 15; i++) {
+                let f = document.createElement('div'); f.className = 'sunflower'; f.innerHTML = '🌻';
+                f.style.left = Math.random() * 95 + 'vw';
+                garden.appendChild(f);
+            }
+        }
+
+        // 2. Proposal Interaction
+        function openLetter() {
+            document.getElementById('envelope').style.display = 'none';
+            document.getElementById('letter').style.display = 'block';
+        }
+
+        const noBtn = document.getElementById('noBtn');
+        noBtn.onmouseover = () => {
+            noBtn.style.left = Math.random() * 80 + 'vw';
+            noBtn.style.top = Math.random() * 80 + 'vh';
+            noBtn.style.position = 'fixed';
+        };
+
+        // 3. Card Scene
+        function goToCards() {
+            document.getElementById('scene2').style.display = 'none';
+            document.getElementById('scene3').style.display = 'flex';
+        }
+
+        let flipped = 0;
+        function flipCard(el) {
+            if (!el.classList.contains('flipped')) {
+                el.classList.add('flipped');
+                flipped++;
+                if (flipped === 3) document.getElementById('reveal-final-btn').style.display = 'block';
+            }
+        }
+
+        // 4. Final Scene Typing
+        function goToFinal() {
+            document.getElementById('scene3').style.display = 'none';
+            document.getElementById('scene4').style.display = 'flex';
+            const text = "You know what? Butterflies can't see their own wings, But everyone still see their beauty and you are the same ❤️";
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    document.getElementById('typing-text').innerHTML += text.charAt(i);
+                    i++; setTimeout(type, 60);
+                } else {
+                    document.getElementById('bottom-note').style.opacity = '1';
+                }
+            }
+            type();
+        }
+    </script>
+</body>
+</html>
